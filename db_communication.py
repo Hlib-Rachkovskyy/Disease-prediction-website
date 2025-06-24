@@ -3,16 +3,17 @@ import string
 from flask_sqlalchemy import SQLAlchemy
 import secrets
 
-
 db = SQLAlchemy()
 
 """Invites"""
+
 
 def get_invites(amount):
     invites = InvitesToSystem.query.limit(amount).all()
     if len(invites) == 0:
         return None
     return invites
+
 
 def create_invites(num):
     invites = [generate_token() for _ in range(num)]
@@ -44,7 +45,6 @@ def generate_token():
 
 
 """Disease"""
-
 
 
 def get_diseases_of_user_not_approved(user):
@@ -96,13 +96,11 @@ def get_user_added_diseases(username):
     return None
 
 
-
 def create_user(name, password, workplace):
     new_user = User(Username=name, Password=password, Workplace=workplace)
     db.session.add(new_user)
     db.session.commit()
     return new_user.Id
-
 
 
 """Approved by"""
@@ -120,10 +118,7 @@ def approve_disease_db(disease, user):
     return False
 
 
-
-
 """Migrations"""
-
 
 approved_by = db.Table('approved_by',
                        db.Column('user_id', db.Integer, db.ForeignKey('user.Id'), primary_key=True),
@@ -147,6 +142,7 @@ class Disease(db.Model):
             'User_Id': self.User_Id
         }
 
+
 class User(db.Model):
     Id = db.Column(db.Integer, primary_key=True)
     Username = db.Column(db.String(50), nullable=False)
@@ -163,6 +159,7 @@ class InvitesToSystem(db.Model):
         return {
             'Invite': self.Invite,
         }
+
 
 class GuestRequest(db.Model):
     Id = db.Column(db.Integer, primary_key=True)
